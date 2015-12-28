@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>fdlm.github.io</title>
+    <link>http://fdlm.github.io/</link>
+    <description>Recent content on fdlm.github.io</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://fdlm.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>About Me</title>
+      <link>http://fdlm.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://fdlm.github.io/about/</guid>
+      <description>&lt;p&gt;&lt;center&gt;
+    &lt;div class=&#39;profile&#39;&gt;
+        &lt;img class=&#39;2x&#39; id=&#39;avatar&#39; src=&#39;../images/avatar.png&#39;/&gt;
+    &lt;/div&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;I am a PhD researcher at the &lt;a href=&#34;http://www.cp.jku.at&#34;&gt;Department of Computational
+Perception&lt;/a&gt; of the &lt;a href=&#34;http://www.jku.at&#34;&gt;Johannes Kepler
+University&lt;/a&gt; in Linz, where I work on probabilistic models
+and deep neural networks for audio/music processing. Currently I am interested
+in extracting musical artifacts such as (down-)beats and chords/harmonies from
+audio recordings to faciliate a richer computational understanding of music.&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;strong&gt;Find me on&amp;hellip;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.github.com/fdlm&#34;&gt;GitHub&lt;/a&gt; + &lt;a href=&#34;http://lamuerte.soup.io&#34;&gt;Soup&lt;/a&gt; + &lt;a href=&#34;http://twitter.com/fdelamuerte&#34;&gt;Twitter&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Publications</title>
+      <link>http://fdlm.github.io/publications/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://fdlm.github.io/publications/</guid>
+      <description>
+
+&lt;h3 id=&#34;2014:480c4de99851329b51acecc000e2e84f&#34;&gt;2014&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.cp.jku.at/research/papers/Korzeniowski_ISMIR_2014.pdf&#34;&gt;Probabilistic Extraction of Beat Positions from a Beat Activation Function&lt;/a&gt;&lt;br /&gt;
+Korzeniowski, F., Böck, S., and Widmer, G.&lt;br /&gt;
+In Proceedings of 15th International Society for Music Information Retrieval Conference (ISMIR), Taipei, Taiwan, 2014.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.cp.jku.at/research/papers/Krebs_etal_EUSIPCO_2014.pdf&#34;&gt;Unsupervised Learning and Refinement of Rhythmic Patterns for Beat and Downbeat Tracking&lt;/a&gt;&lt;br /&gt;
+Krebs, F., Korzeniowski, F., Grachten, M., and Widmer, G.&lt;br /&gt;
+In Proceedings of the 22nd European Signal Processing Conference (EUSIPCO), Lisbon, Portugal, 2014.&lt;/p&gt;
+
+&lt;h3 id=&#34;2013:480c4de99851329b51acecc000e2e84f&#34;&gt;2013&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.cp.jku.at/research/papers/Korzeniowski_SMC_2013.pdf&#34;&gt;Refined Spectral Template Models for Score Following&lt;/a&gt;&lt;br /&gt;
+Korzeniowski, F. and Widmer G.&lt;br /&gt;
+In Proceedings of the Sound and Music Computing Conference (SMC), 2013.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.cp.jku.at/research/papers/Korzeniowski_ICMC_2013.pdf&#34;&gt;Tracking Rests and Tempo Changes: Improved Score Following with Particle Filters&lt;/a&gt;&lt;br /&gt;
+Korzeniowski, F., Krebs F., Arzt A. and Widmer G.&lt;br /&gt;
+In Proceedings of the International Computer Music Conference (ICMC), 2013.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

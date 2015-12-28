@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 49 49">
+    <rect y="0" x="0"  height="7" width="7" style="fill:#8ab09c" />
+    <rect y="0" x="7"  height="7" width="7" style="fill:#fbdd64" />
+    <rect y="0" x="14" height="7" width="7" style="fill:#da7248" />
+    <rect y="0" x="21" height="7" width="7" style="fill:#ff9980" />
+    <rect y="0" x="28" height="7" width="7" style="fill:#ab5500" />
+    <rect y="0" x="35" height="7" width="7" style="fill:#a1717c" />
+    <rect y="0" x="42" height="7" width="7" style="fill:#7b969e" />
+
+    <rect y="7" x="7"  height="7" width="7" style="fill:#8ab09c" />
+    <rect y="7" x="14" height="7" width="7" style="fill:#fbdd64" />
+    <rect y="7" x="21" height="7" width="7" style="fill:#da7248" />
+    <rect y="7" x="28" height="7" width="7" style="fill:#ff9980" />
+    <rect y="7" x="35" height="7" width="7" style="fill:#ab5500" />
+    <rect y="7" x="42" height="7" width="7" style="fill:#a1717c" />
+    <rect y="7" x="0"  height="7" width="7" style="fill:#7b969e" />
+
+    <rect y="14" x="14" height="7" width="7" style="fill:#8ab09c" />
+    <rect y="14" x="21" height="7" width="7" style="fill:#fbdd64" />
+    <rect y="14" x="28" height="7" width="7" style="fill:#da7248" />
+    <rect y="14" x="35" height="7" width="7" style="fill:#ff9980" />
+    <rect y="14" x="42" height="7" width="7" style="fill:#ab5500" />
+    <rect y="14" x="0"  height="7" width="7" style="fill:#a1717c" />
+    <rect y="14" x="7"  height="7" width="7" style="fill:#7b969e" />
+
+    <rect y="21" x="21" height="7" width="7" style="fill:#8ab09c" />
+    <rect y="21" x="28" height="7" width="7" style="fill:#fbdd64" />
+    <rect y="21" x="35" height="7" width="7" style="fill:#da7248" />
+    <rect y="21" x="42" height="7" width="7" style="fill:#ff9980" />
+    <rect y="21" x="0"  height="7" width="7" style="fill:#ab5500" />
+    <rect y="21" x="7"  height="7" width="7" style="fill:#a1717c" />
+    <rect y="21" x="14" height="7" width="7" style="fill:#7b969e" />
+
+    <rect y="28" x="28" height="7" width="7" style="fill:#8ab09c" />
+    <rect y="28" x="35" height="7" width="7" style="fill:#fbdd64" />
+    <rect y="28" x="42" height="7" width="7" style="fill:#da7248" />
+    <rect y="28" x="0"  height="7" width="7" style="fill:#ff9980" />
+    <rect y="28" x="7"  height="7" width="7" style="fill:#ab5500" />
+    <rect y="28" x="14" height="7" width="7" style="fill:#a1717c" />
+    <rect y="28" x="21" height="7" width="7" style="fill:#7b969e" />
+
+    <rect y="35" x="35" height="7" width="7" style="fill:#8ab09c" />
+    <rect y="35" x="42" height="7" width="7" style="fill:#fbdd64" />
+    <rect y="35" x="0"  height="7" width="7" style="fill:#da7248" />
+    <rect y="35" x="7"  height="7" width="7" style="fill:#ff9980" />
+    <rect y="35" x="14" height="7" width="7" style="fill:#ab5500" />
+    <rect y="35" x="21" height="7" width="7" style="fill:#a1717c" />
+    <rect y="35" x="28" height="7" width="7" style="fill:#7b969e" />
+
+    <rect y="42" x="42" height="7" width="7" style="fill:#8ab09c" />
+    <rect y="42" x="0"  height="7" width="7" style="fill:#fbdd64" />
+    <rect y="42" x="7"  height="7" width="7" style="fill:#da7248" />
+    <rect y="42" x="14" height="7" width="7" style="fill:#ff9980" />
+    <rect y="42" x="21" height="7" width="7" style="fill:#ab5500" />
+    <rect y="42" x="28" height="7" width="7" style="fill:#a1717c" />
+    <rect y="42" x="35" height="7" width="7" style="fill:#7b969e" />
+</svg>
