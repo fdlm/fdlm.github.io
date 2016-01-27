@@ -3,11 +3,17 @@
   
   <url>
     <loc>http://fdlm.github.io/</loc>
+    <lastmod>2016-01-27T11:51:04+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://fdlm.github.io/about/</loc>
+  </url>
+  
+  <url>
+    <loc>http://fdlm.github.io/projects/</loc>
+    <lastmod>2016-01-27T11:51:04+01:00</lastmod>
   </url>
   
   <url>

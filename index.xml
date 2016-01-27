@@ -36,6 +36,32 @@ audio recordings to faciliate a richer computational understanding of music.&lt;
     </item>
     
     <item>
+      <title>Projects</title>
+      <link>http://fdlm.github.io/projects/</link>
+      <pubDate>Wed, 27 Jan 2016 11:51:04 +0100</pubDate>
+      
+      <guid>http://fdlm.github.io/projects/</guid>
+      <description>
+
+&lt;p&gt;This page gives a short description of the projects I developed or am involved
+in on GitHub.&lt;/p&gt;
+
+&lt;h2 id=&#34;rthmm-https-www-github-com-fdlm-rthmm:3c42bb4157bf51d85ae7ffc4e1685909&#34;&gt;&lt;a href=&#34;https://www.github.com/fdlm/rtHMM&#34;&gt;rtHMM&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;rtHMM is a C++ library implementing the major inference algorithms for
+Hidden Markov Models with a focus on real-time usage. It is designed to
+efficiently handle large state spaces, especially if they are sparse. I
+developed it at the beginning of my PhD studies for a HMM-based score following system.
+I don&amp;rsquo;t actively work on it anymore, but the current version is quite usable.
+For example, rtHMM powers the mighty Drum-O-Tron 3000, a live drum
+accompaniment &amp;ldquo;robot&amp;rdquo; created at the
+&lt;a href=&#34;http://www.cp.jku.at&#34;&gt;Department of Computational Perception&lt;/a&gt;:&lt;/p&gt;
+
+&lt;iframe width=&#34;520&#34; height=&#34;390&#34; src=&#34;https://www.youtube.com/embed/sjkZg8bvMWw?rel=0&amp;amp;showinfo=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Publications</title>
       <link>http://fdlm.github.io/publications/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
