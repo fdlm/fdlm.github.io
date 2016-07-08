@@ -1,0 +1,223 @@
+    <!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="Filip Korzeniowski">
+		<meta name="description" content="this is my personal website">
+		<meta name="generator" content="Hugo 0.14" />
+		<title>The Deep Chroma Extractor &middot; fdlm.github.io</title>
+		<link rel="shortcut icon" href="http://fdlm.github.io/images/favicon.ico">
+		<link rel="stylesheet" href="http://fdlm.github.io/css/style.css">
+		<link rel="stylesheet" href="http://fdlm.github.io/css/highlight.css">
+		<link href="http://fdlm.github.io/index.xml" rel="alternate" type="application/rss+xml" title="fdlm.github.io" />
+	</head>
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='http://fdlm.github.io/'> <span class="arrow">←</span>Home</a>
+	
+
+    
+        <a href='http://fdlm.github.io/about'>About</a>
+    
+        <a href='http://fdlm.github.io/projects'>Projects</a>
+    
+        <a href='http://fdlm.github.io/publications'>Publications</a>
+    
+
+	
+	<a class="cta" href="http://fdlm.github.io/index.xml">RSS</a>
+	
+</nav>
+
+
+        <section id="wrapper">
+            <article class="post">
+                <header>
+                    <h1>The Deep Chroma Extractor</h1>
+                    <h2 class="headline">May 23, 2016</h2>
+                </header>
+                <section id="post-body">
+                    
+
+<p>This page contains additional information and data necessary to reproduce the
+results of the following paper:</p>
+
+<p>F. Korzeniowski and G. Widmer. &ldquo;Feature Learning for Chord Recognition: The
+Deep Chroma Extractor&rdquo;. In <em>Proceedings of the 17th International Society for
+Music Information Retrieval Conference (ISMIR 2016)</em>,  New York, USA.</p>
+
+<h2 id="software:1bfd6a13e67e8e2c64570b6655045f5e">Software</h2>
+
+<p>The pre-trained feature extractor is available as part of the
+<a href="https://github.com/CPJKU/madmom">madmom</a> audio processing framework as the
+<code>DeepChromaProcessor</code> class. Note that the model bundled with madmom differs
+from the one we used in the paper: it uses less units in the hidden layers of
+the neural network and operates on a narrower frequency band. We thus reduced
+the size of the model files without compromising the results too much.</p>
+
+<p>The best performing model trained for the paper is available
+<a href="https://drive.google.com/file/d/0B0gBhdh1fIPKUld3RWN5VlNGM2M/view?usp=sharing">here</a>.
+To use it with madmom, set the <code>models</code> parameter of the <code>DeepChromaProcessor</code>
+class accordingly, and adapt the spectrogram parameters: <code>fmin=30</code>,
+<code>fmax=5500</code>, <code>unique_filters=False</code>. Note that the file actually contains
+8 models, one for each test fold. If you load all of them, the final prediction
+will be the average prediction of each model.</p>
+
+<p>If you are using the models in your research, make sure to only use models that
+are not trained on files that you test on. A model with index
+i (e.g. <code>chroma_dnn_i.pkl</code>) was trained on all files in folds different from i.
+For example, the model in <code>chroma_dnn_2.pkl</code> was trained on all files defined
+in the <code>folddef_$j.fold</code> (where <code>$j</code> is in {0, 1, 3, 4, 5, 6, 7}) files of
+all datasets used (beatles, queen, zweieck, rwc, robbie_williams). See the
+download section at the bottom for the fold definitions we used.</p>
+
+<h3 id="reproducing-the-experiments:1bfd6a13e67e8e2c64570b6655045f5e">Reproducing the experiments</h3>
+
+<p>Although we tried to facilitate reproducing our experiments as easily as
+possible, doing it is much more involved than applying the pre-trained
+model. You will have re-create the experimental pipeline, install all
+necessary libraries, and prepare the audio and chord data.</p>
+
+<h4 id="experimental-pipeline-setup:1bfd6a13e67e8e2c64570b6655045f5e">Experimental Pipeline Setup</h4>
+
+<p>The  experimental pipeline is implemented in Python, so you
+will need a standard &ldquo;scientific Python&rdquo; setup with NumPy, SciPy, etc&hellip; You
+will also need the following packages:</p>
+
+<ul>
+<li><a href="https://github.com/Theano/Theano">Theano</a></li>
+<li><a href="https://github.com/Lasagne/Lasagne">Lasagne</a></li>
+<li><a href="https://github.com/fdlm/dmgr">dmgr</a></li>
+<li><a href="https://github.com/fdlm/nn">nn</a></li>
+<li><a href="https://github.com/CPJKU/madmom">madmom</a>*</li>
+<li><a href="https://github.com/librosa/librosa">librosa</a>*</li>
+<li><a href="https://github.com/craffel/mir_eval">mir_eval</a>*</li>
+<li><a href="https://bitbucket.org/xi/pyyaml">pyyaml</a>*</li>
+<li><a href="https://github.com/IDSIA/sacred">sacred</a>*</li>
+</ul>
+
+<p>Packages marked with a * can be installed using <code>pip</code>, the others are either
+not available or recommended to be installed from source. If I missed any
+dependency, please let me know.</p>
+
+<p>Once you have all libraries installed, clone the
+<a href="https://github.com/fdlm/chordrec">chordrec</a> repository and add its path to
+the <code>$PYTHONPATH</code> environment variable.</p>
+
+<h4 id="data-setup:1bfd6a13e67e8e2c64570b6655045f5e">Data Setup</h4>
+
+<p>Put all datasets into respective subdirectories under
+<code>chordrec/experiments/data</code>: <code>beatles</code>, <code>queen</code>, <code>zweieck</code>, <code>robbie_williams</code>,
+and <code>rwc</code>. The datasets have to contain three types of data: audio files in
+<code>.flac</code> format, corresponding chord annotations in lab format with the file
+extension <code>.chords</code>, and the cross-validation split definitions. Audio and
+annotation files can be organised on a directory structure, but do not need
+to; the programs will look for any <code>.flac</code> and <code>.chord</code> files in all
+directories recursively. However, the split definition
+files must be in a <code>splits</code> sub-directory in each dataset directory (e.g.
+<code>beatles/splits</code>). File names of audio and annotation files must correspond to
+the names given in the split definition files. For more information regarding
+the data take a look at the Data section below, where we provide a <code>.zip</code> file
+with the annotations and split definitions that you just need to extract
+into the <code>experiments</code> directory.</p>
+
+<p>The <code>data</code> directory should look like this, where the internal structures
+of the <code>queen</code>, <code>robbie_williams</code>, <code>rwc</code> and <code>zweieck</code> directories following
+the one of the <code>beatles</code>:</p>
+
+<pre><code>experiments
+ +-- data
+      +-- beatles
+           +-- *.flac
+           +-- *.chords
+           +-- splits
+                +-- 8-fold_cv_album_distributed_*.fold
+      +-- queen
+      +-- robbie_williams
+      +-- rwc
+      +-- zweieck
+</code></pre>
+
+<p>Make sure the link <code>chordrec/experiments/ismir2016/data</code> refers to this
+directory and works.</p>
+
+<h4 id="running-the-experiment:1bfd6a13e67e8e2c64570b6655045f5e">Running the Experiment</h4>
+
+<p>We provide script and configuration files that run the exact experiments that
+produced the results shown in Table 1 in the paper. They reside under
+<code>experiments/ismir2016</code>. If everything is set up correctly, running the
+experiment should be as easy as calling the <code>run.sh</code> script. This can take
+a considerable amount of time, because each configuration is run ten times.
+You can change that by editing the <code>run.sh</code> script itself.</p>
+
+<p>Results are stored in the <code>results</code> sub-directory created when running
+the experiment. In <code>results</code>, there are four directories for each tested
+configuration, which contain the results of all experiments. The results of
+each experiment is stored in <code>artifacts/results.yaml</code>. To get a quick
+overview of the results for a specific configuration, you can simply use
+the <code>grep</code> command, e.g.:</p>
+
+<pre><code>grep majmin results/deep_chroma_test/*/artifacts/results.yaml
+</code></pre>
+
+<h2 id="data:1bfd6a13e67e8e2c64570b6655045f5e">Data</h2>
+
+<p>We trained the neural network on a compound dataset comprising the Beatles,
+Queen, Zweieck, Robbie Williams and RWC popular music datasets. While we cannot
+provide audio files due to copyright reasons, we do provide links with more
+information about these datasets and to the chord annotations we used. Note
+that our file naming scheme differs from the annotation archives you can
+download on the respective sites. For convenience, we provide a <code>.zip</code> archive
+with annotations following our naming scheme further below.</p>
+
+<ul>
+<li><strong>Beatles, Queen and Zweieck:</strong> See the <a href="http://isophonics.net/">isophonics website</a> for chord annotations and information about audio files.</li>
+<li><strong>Robbie Williams</strong>: The dataset description can be found in <em>Bruno Di Giorgi et. al., &ldquo;Automatic chord recognition based on the
+probabilistic modeling of diatonic modal harmony&rdquo;</em>. Download the annotations from
+<a href="https://www.researchgate.net/publication/260399240_Chord_and_Harmony_annotations_of_the_first_five_albums_by_Robbie_Williams">here</a>.</li>
+<li><strong>RWC</strong>: For information on obtaining the audio files, see the <a href="https://staff.aist.go.jp/m.goto/RWC-MDB/">RWC website</a>. Chord annotations are on <a href="https://github.com/tmc323/Chord-Annotations">GitHub</a>.</li>
+</ul>
+
+<h3 id="download:1bfd6a13e67e8e2c64570b6655045f5e">Download</h3>
+
+<p>For convenience, we provide the annotations renamed to our naming scheme
+<a href="https://drive.google.com/file/d/0B0gBhdh1fIPKamVaNnpaWHhwdWc/view?usp=sharing">here</a>. This
+archive also includes the fold definitions for cross-validation for each
+dataset. You can extract this archive into the <code>experiments/data</code> directory and
+add the audio files to the respective directories. Then you should be ready to
+go.</p>
+
+                </section>
+            </article>
+
+            
+
+            
+            
+            
+            
+            
+            
+            
+            
+
+
+            <footer id="footer">
+    <p class="small">
+        Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+    </p>
+</footer>
+        </section>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://fdlm.github.io/js/main.js"></script>
+<script src="http://fdlm.github.io/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+    </body>
+</html>

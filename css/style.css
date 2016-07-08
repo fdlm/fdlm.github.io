@@ -43,7 +43,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 .icon-facebook-rect:before { content: '\e803'; }
 
 /* Spacing */
-.post h1, h3, h4, h5, p, .post-body ul, #post-list li, pre {
+.post h1, h3, h4, h5, p, #post-body ul, #post-list li, pre {
 margin-bottom: 20px;
 }
 
@@ -189,8 +189,8 @@ a,
 	transition: all 0.15s ease;
 }
 
-ul 	{ margin:0; padding:0; }
-li	{ list-style-type:circle; list-style-position:inside; }
+ul 	{ margin:0; padding:0; padding-left:20px; }
+li	{ list-style-type:circle; }
 
 /* Line Height */
 #post-body, p { line-height:1.7; }
@@ -299,23 +299,22 @@ hr {
 	background: #eee;
 }
 
-span.code { font-family:Menlo, Monaco, Courier; background-color:#EEE; font-size:14px; }
+span.code { font-family:Inconsolata,monospace; background-color:#fdfdfd; font-size:14px; }
+p code { font-family:Inconsolata,monospace; background-color:#f0f0f0; }
 
-pre	{
-	font-family:Menlo, Monaco, Courier;
+pre {
 	white-space:pre-wrap;
 	/*border: 1px solid #ddd;*/
 	padding:20px;
-	background-color:#fdfdfd;
-	/*font-size:14px;*/
 	overflow:auto;
 	border-radius: 3px;
-	background: #272b2d;
-	  font-family: 'Source Code Pro',Menlo,monospace;
-	  font-size: 13px;
-	  line-height: 1.5em;
-	  font-weight: 500;
-	color: #d0d4d7;
+	/* background: #272b2d; */
+	background: #f0f0f0;
+	font-family:Inconsolata,monospace;
+	font-size: 14px;
+	line-height: 1.5em;
+	font-weight: 500;
+	/* color: #d0d4d7; */
 
 }
 
