@@ -161,29 +161,8 @@ necessary libraries, and prepare the audio and chord data.&lt;/p&gt;
 
 &lt;h4 id=&#34;experimental-pipeline-setup:1bfd6a13e67e8e2c64570b6655045f5e&#34;&gt;Experimental Pipeline Setup&lt;/h4&gt;
 
-&lt;p&gt;The  experimental pipeline is implemented in Python, so you
-will need a standard &amp;ldquo;scientific Python&amp;rdquo; setup with NumPy, SciPy, etc&amp;hellip; You
-will also need the following packages:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/Theano/Theano&#34;&gt;Theano&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/Lasagne/Lasagne&#34;&gt;Lasagne&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fdlm/dmgr&#34;&gt;dmgr&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fdlm/nn&#34;&gt;nn&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/CPJKU/madmom&#34;&gt;madmom&lt;/a&gt;*&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/librosa/librosa&#34;&gt;librosa&lt;/a&gt;*&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/craffel/mir_eval&#34;&gt;mir_eval&lt;/a&gt;*&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://bitbucket.org/xi/pyyaml&#34;&gt;pyyaml&lt;/a&gt;*&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/IDSIA/sacred&#34;&gt;sacred&lt;/a&gt;*&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Packages marked with a * can be installed using &lt;code&gt;pip&lt;/code&gt;, the others are either
-not available or recommended to be installed from source. If I missed any
-dependency, please let me know.&lt;/p&gt;
-
-&lt;p&gt;Once you have all libraries installed, clone the
-&lt;a href=&#34;https://github.com/fdlm/chordrec&#34;&gt;chordrec&lt;/a&gt; repository and add its path to
-the &lt;code&gt;$PYTHONPATH&lt;/code&gt; environment variable.&lt;/p&gt;
+&lt;p&gt;Install the &lt;a href=&#34;https://github.com/fdlm/chordrec&#34;&gt;chordrec&lt;/a&gt; framework by
+following the instructions in the README file.&lt;/p&gt;
 
 &lt;h4 id=&#34;data-setup:1bfd6a13e67e8e2c64570b6655045f5e&#34;&gt;Data Setup&lt;/h4&gt;
 
