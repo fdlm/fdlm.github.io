@@ -6,8 +6,24 @@
     <description>Recent content in Posts on fdlm.github.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 23 May 2016 09:22:08 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 24 Jul 2016 08:38:14 +0200</lastBuildDate>
     <atom:link href="http://fdlm.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>A Fully Convolutional Deep Auditory Model for Musical Chord Recognition</title>
+      <link>http://fdlm.github.io/post/auditorymodel/</link>
+      <pubDate>Sun, 24 Jul 2016 08:38:14 +0200</pubDate>
+      
+      <guid>http://fdlm.github.io/post/auditorymodel/</guid>
+      <description>&lt;p&gt;This site will contain information on reproducing the experiments in the paper&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.cp.jku.at/research/papers/Korzeniowski_MLSP_2016.pdf&#34;&gt;A Fully Convolutional Deep Auditory Model for Musical Chord Recognition&lt;/a&gt;&lt;br /&gt;
+Korzeniowski, F. and Widmer, G.&lt;br /&gt;
+In Proceedings of the IEEE International Workshop on Machine Learning for Signal Processing (MLSP), Salerno, Italy, 2016.&lt;/p&gt;
+
+&lt;p&gt;Please check back soon.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>The Deep Chroma Extractor</title>
