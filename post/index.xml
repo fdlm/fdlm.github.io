@@ -15,13 +15,116 @@
       <pubDate>Sun, 24 Jul 2016 08:38:14 +0200</pubDate>
       
       <guid>http://fdlm.github.io/post/auditorymodel/</guid>
-      <description>&lt;p&gt;This site will contain information on reproducing the experiments in the paper&lt;/p&gt;
+      <description>
+
+&lt;p&gt;This site contains information on reproducing the experiments in the paper&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://www.cp.jku.at/research/papers/Korzeniowski_MLSP_2016.pdf&#34;&gt;A Fully Convolutional Deep Auditory Model for Musical Chord Recognition&lt;/a&gt;&lt;br /&gt;
 Korzeniowski, F. and Widmer, G.&lt;br /&gt;
 In Proceedings of the IEEE International Workshop on Machine Learning for Signal Processing (MLSP), Salerno, Italy, 2016.&lt;/p&gt;
 
-&lt;p&gt;Please check back soon.&lt;/p&gt;
+&lt;h2 id=&#34;software:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Software&lt;/h2&gt;
+
+&lt;p&gt;The pre-trained chord recognition model is available as part of the
+&lt;a href=&#34;https://github.com/CPJKU/madmom&#34;&gt;madmom&lt;/a&gt; audio processing framework. It
+differs only slightly from the model presented in the paper: instead of padding
+the input in the first few convolutional layers, we use a larger context window
+in the input layer, such that the feature map size after the first pooling
+layer is retained.&lt;/p&gt;
+
+&lt;p&gt;The model provided with madmom is trained on a variety of datasets: Isophonics,
+RWC Popular, Robbie Williams, and Billboard. If you use it in research, keep
+in mind that its performance on these sets might be optimistic. We plan to
+provide model files for individual folds in the future.&lt;/p&gt;
+
+&lt;h3 id=&#34;reproducing-the-experiments:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Reproducing the experiments&lt;/h3&gt;
+
+&lt;p&gt;Although we tried to facilitate reproducing our experiments as easily as
+possible, doing it is much more involved than applying the pre-trained
+model. You will have re-create the experimental pipeline, install all
+necessary libraries, and prepare the audio and chord data.&lt;/p&gt;
+
+&lt;h4 id=&#34;experimental-pipeline-setup:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Experimental Pipeline Setup&lt;/h4&gt;
+
+&lt;p&gt;Install the &lt;a href=&#34;https://github.com/fdlm/chordrec&#34;&gt;chordrec&lt;/a&gt; framework by
+following the instructions in the README file.&lt;/p&gt;
+
+&lt;h4 id=&#34;data-setup:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Data Setup&lt;/h4&gt;
+
+&lt;p&gt;Put all datasets into respective subdirectories under
+&lt;code&gt;chordrec/experiments/data&lt;/code&gt;: &lt;code&gt;beatles&lt;/code&gt;, &lt;code&gt;queen&lt;/code&gt;, &lt;code&gt;zweieck&lt;/code&gt;, &lt;code&gt;robbie_williams&lt;/code&gt;,
+and &lt;code&gt;rwc&lt;/code&gt;. The datasets have to contain three types of data: audio files in
+&lt;code&gt;.flac&lt;/code&gt; format, corresponding chord annotations in lab format with the file
+extension &lt;code&gt;.chords&lt;/code&gt;, and the cross-validation split definitions. Audio and
+annotation files can be organised on a directory structure, but do not need
+to; the programs will look for any &lt;code&gt;.flac&lt;/code&gt; and &lt;code&gt;.chord&lt;/code&gt; files in all
+directories recursively. However, the split definition
+files must be in a &lt;code&gt;splits&lt;/code&gt; sub-directory in each dataset directory (e.g.
+&lt;code&gt;beatles/splits&lt;/code&gt;). File names of audio and annotation files must correspond to
+the names given in the split definition files. For more information regarding
+the data take a look at the Data section below, where we provide a &lt;code&gt;.zip&lt;/code&gt; file
+with the annotations and split definitions that you just need to extract
+into the &lt;code&gt;experiments&lt;/code&gt; directory.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;data&lt;/code&gt; directory should look like this, where the internal structures
+of the &lt;code&gt;queen&lt;/code&gt;, &lt;code&gt;robbie_williams&lt;/code&gt;, &lt;code&gt;rwc&lt;/code&gt; and &lt;code&gt;zweieck&lt;/code&gt; directories following
+the one of the &lt;code&gt;beatles&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;experiments
+ +-- data
+      +-- beatles
+           +-- *.flac
+           +-- *.chords
+           +-- splits
+                +-- 8-fold_cv_album_distributed_*.fold
+      +-- queen
+      +-- robbie_williams
+      +-- rwc
+      +-- zweieck
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Make sure the link &lt;code&gt;chordrec/experiments/mlsp2016/data&lt;/code&gt; refers to this
+directory and works.&lt;/p&gt;
+
+&lt;h4 id=&#34;running-the-experiment:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Running the Experiment&lt;/h4&gt;
+
+&lt;p&gt;Follow the &lt;code&gt;chordrec/experiments/mlsp2016/README&lt;/code&gt; file to run the experiments.
+Training the CNN can take a while.&lt;/p&gt;
+
+&lt;p&gt;Results are stored in the &lt;code&gt;results&lt;/code&gt; sub-directory created when running the
+experiment. The results of each experiment is stored in the &lt;code&gt;artifacts/results.yaml&lt;/code&gt;
+file in each subdirectory. To get a quick overview of the results, you can
+simply use the &lt;code&gt;grep&lt;/code&gt; command, e.g.:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;grep majmin results/*/artifacts/results.yaml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;data:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Data&lt;/h2&gt;
+
+&lt;p&gt;We trained the neural network on a compound dataset comprising the Beatles,
+Queen, Zweieck, Robbie Williams and RWC popular music datasets. While we cannot
+provide audio files due to copyright reasons, we do provide links with more
+information about these datasets and to the chord annotations we used. Note
+that our file naming scheme differs from the annotation archives you can
+download on the respective sites. For convenience, we provide a &lt;code&gt;.zip&lt;/code&gt; archive
+with annotations following our naming scheme further below.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Beatles, Queen and Zweieck:&lt;/strong&gt; See the &lt;a href=&#34;http://isophonics.net/&#34;&gt;isophonics website&lt;/a&gt; for chord annotations and information about audio files.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Robbie Williams&lt;/strong&gt;: The dataset description can be found in &lt;em&gt;Bruno Di Giorgi et. al., &amp;ldquo;Automatic chord recognition based on the
+probabilistic modeling of diatonic modal harmony&amp;rdquo;&lt;/em&gt;. Download the annotations from
+&lt;a href=&#34;https://www.researchgate.net/publication/260399240_Chord_and_Harmony_annotations_of_the_first_five_albums_by_Robbie_Williams&#34;&gt;here&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;RWC&lt;/strong&gt;: For information on obtaining the audio files, see the &lt;a href=&#34;https://staff.aist.go.jp/m.goto/RWC-MDB/&#34;&gt;RWC website&lt;/a&gt;. Chord annotations are on &lt;a href=&#34;https://github.com/tmc323/Chord-Annotations&#34;&gt;GitHub&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;download:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Download&lt;/h3&gt;
+
+&lt;p&gt;For convenience, we provide the annotations renamed to our naming scheme
+&lt;a href=&#34;https://drive.google.com/file/d/0B0gBhdh1fIPKamVaNnpaWHhwdWc/view?usp=sharing&#34;&gt;here&lt;/a&gt;. This
+archive also includes the fold definitions for cross-validation for each
+dataset. You can extract this archive into the &lt;code&gt;experiments/data&lt;/code&gt; directory and
+add the audio files to the respective directories. Then you should be ready to
+go.&lt;/p&gt;
 </description>
     </item>
     
