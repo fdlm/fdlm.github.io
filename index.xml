@@ -18,7 +18,7 @@
       <pubDate>Fri, 22 Dec 2017 10:37:55 +0100</pubDate>
       
       <guid>https://fdlm.github.io/post/amsgrad/</guid>
-      <description>For ICLR 2018, two papers targeting problems with the ADAM update rule were submitted: On the Convergence of Adam and Beyond, and Fixing Weight Decay Regularization in Adam. The former claims to have found a flaw in ADAM&amp;rsquo;s proof of convergence, and provides a simple solution. The resulting algorithm is called AMSGrad. The paper shows the advantages of AMSGrad on a synthetic task and a small number of experiments.</description>
+      <description>For ICLR 2018, two papers targeting problems with the ADAM update rule were submitted: On the Convergence of Adam and Beyond, and Fixing Weight Decay Regularization in Adam. The former points to a flaw in ADAM&amp;rsquo;s proof of convergence, and provides a simple solution. The resulting algorithm is called AMSGrad. The paper shows the advantages of AMSGrad on a synthetic task and a small number of experiments. However, it only uses small networks (1-layer MLP on MNIST, and a small ConvNet for CIFAR-10), and does not show test accuracy, the metric we ultimately care about more than cross-entropy loss.</description>
     </item>
     
     <item>

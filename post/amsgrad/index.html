@@ -49,7 +49,7 @@
 <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.13.min.js"></script>
 <script type="text/javascript" src="../../plots/amsgrad.js"></script></p>
 
-<p>For ICLR 2018, two papers targeting problems with the <a href="https://arxiv.org/abs/1412.6980">ADAM</a> update rule were submitted: <a href="https://openreview.net/forum?id=ryQu7f-RZ">On the Convergence of Adam and Beyond</a>, and <a href="https://openreview.net/forum?id=rk6qdGgCZ&amp;noteId=H1zlFEcxM">Fixing Weight Decay Regularization in Adam</a>. The former claims to have found a flaw in ADAM&rsquo;s proof of convergence, and provides a simple solution. The resulting algorithm is called AMSGrad.
+<p>For ICLR 2018, two papers targeting problems with the <a href="https://arxiv.org/abs/1412.6980">ADAM</a> update rule were submitted: <a href="https://openreview.net/forum?id=ryQu7f-RZ">On the Convergence of Adam and Beyond</a>, and <a href="https://openreview.net/forum?id=rk6qdGgCZ&amp;noteId=H1zlFEcxM">Fixing Weight Decay Regularization in Adam</a>. The former points to a flaw in ADAM&rsquo;s proof of convergence, and provides a simple solution. The resulting algorithm is called AMSGrad.
 The paper shows the advantages of AMSGrad on a synthetic task and a small number of experiments. However, it only uses small networks (1-layer MLP on MNIST, and a small ConvNet for CIFAR-10), and does not show test accuracy, the metric we ultimately care about more than cross-entropy loss. The ConvNet they train on CIFAR-10 is far from state-of-the-art results in terms of both train and test loss (we don&rsquo;t know about accuracy).</p>
 
 <p>Since I use ADAM in most of my experiments, I decided to evaluate AMSGrad on more realistic networks. Mind you, the models I trained here are still small, and not state-of-the-art, but definitely closer than what the paper shows.</p>
@@ -127,7 +127,7 @@ The code to produce the experiments is available <a href="https://github.com/fdl
 function. The dashed lines indicate dropout with probabilities as indicated
 on top of the lines. For details, please see the <a href="https://github.com/fdlm/amsgrad_experiments/blob/master/models.py">code</a>.</p>
 
-<p>In the following plots, ADAM&rsquo;s results will always be blue, AMSGrad&rsquo;s results will be red. Lighter colors indicate that bias correction was turned off. Each line represents on training run.</p>
+<p>In the following plots, ADAM&rsquo;s results will always be blue, AMSGrad&rsquo;s results will be red. Lighter colors indicate that bias correction was turned off. Each line represents one training run.</p>
 
 <h2 id="training-loss">Training Loss</h2>
 
@@ -135,7 +135,7 @@ on top of the lines. For details, please see the <a href="https://github.com/fdl
     <div class="bk-plotdiv" id="dcb9ed09-e336-4782-8c5c-651d1536c637"></div>
 </div>
 
-<p>In my experiments, training loss came very close to 0, compared to 0.3 in the paper. This is, of course, due to the much larger model I used. We also see that AMSGrad seems to converge faster in the last training phase if the learning rate is not too low, and that, most of the time, using bias correction helps convergence. In the end, however, all variants for most hyper-parameter settings (except when the learning rate is too low) converge to a similar final loss. If we zoom in, we see ADAM often overtaking AMSGrad in the final few epochs. Not that this matters much&mdash;it is the <em>training</em> loss, after all. However, these are different results than reported in the paper, where AMSGrad&rsquo;s train loss was much lower than ADAM&rsquo;s (see Fig. 2 in the paper, bottom left plot).</p>
+<p>In my experiments, training loss came very close to 0, compared to 0.3 in the paper. This is, of course, due to the much larger model I used. We also see that AMSGrad seems to converge faster in the last training phase if the learning rate is not too low, and that, most of the time, using bias correction helps convergence. In the end, however, all variants for most hyper-parameter settings (except when the learning rate is too low) converge to a similar final loss. If we zoom in, we see ADAM often overtaking AMSGrad in the final few epochs. Not that this matters much&mdash;it is the <em>training</em> loss, after all. However, the results with this kind of model (and training scheme) are different from the ones using the CifarNet model reported in the paper, where AMSGrad&rsquo;s train loss was much lower than ADAM&rsquo;s (see Fig. 2 in the paper, bottom left plot).</p>
 
 <h2 id="validation-loss">Validation Loss</h2>
 
@@ -173,6 +173,7 @@ on top of the lines. For details, please see the <a href="https://github.com/fdl
 <li>The performance on the training set is similar for both with respect to both loss and accuracy.</li>
 <li>Test (here, validation) loss is indeed lower for AMSGrad. However,</li>
 <li>the improvement in test loss does <em>not</em> translate to better test accuracy. (To be fair, the authors never claimed that.)</li>
+<li>The difference in behaviour between test loss and test accuracy raises critical questions: How well-suited is categorical cross-entropy for training networks for classification? Can we do better?</li>
 </ul>
 
 <p>To clarify this: I do appreciate the authors work to point out weaknesses in ADAM. And though I did not yet check the proofs (as nobody did for ADAM until now, apparently), I am inclined to believe their conclusions. Also, the artificial examples do show that ADAM does not work under certain conditions. I think it&rsquo;s a good paper.</p>
