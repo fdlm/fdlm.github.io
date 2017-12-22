@@ -1,0 +1,314 @@
+    <!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="Filip Korzeniowski">
+		<meta name="description" content="this is my personal website">
+		<meta name="generator" content="Hugo 0.31.1" />
+		<title>Experiments with AMSGrad &middot; fdlm.github.io</title>
+		<link rel="shortcut icon" href="https://fdlm.github.io/images/favicon.ico">
+		<link rel="stylesheet" href="https://fdlm.github.io/css/style.css">
+		<link rel="stylesheet" href="https://fdlm.github.io/css/highlight.css">
+		<link href="https://fdlm.github.io/index.xml" rel="alternate" type="application/rss+xml" title="fdlm.github.io" />
+
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='https://fdlm.github.io/'> <span class="arrow">←</span>Home</a>
+	
+
+        
+        <a href='https://fdlm.github.io/about/'>About</a>
+        
+        <a href='https://fdlm.github.io/projects/'>Projects</a>
+        
+        <a href='https://fdlm.github.io/publications/'>Publications</a>
+        
+
+	
+	<a class="cta" href="https://fdlm.github.io/index.xml">RSS</a>
+	
+</nav>
+
+
+        <section id="wrapper">
+            <article class="post">
+                <header>
+                    <h1>Experiments with AMSGrad</h1>
+                    <h2 class="headline">December 22, 2017</h2>
+                </header>
+                <section id="post-body">
+                    
+
+<p><link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.13.min.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.13.min.js"></script>
+<script type="text/javascript" src="../../plots/amsgrad.js"></script></p>
+
+<p>For ICLR 2018, two papers targeting problems with the <a href="https://arxiv.org/abs/1412.6980">ADAM</a> update rule were submitted: <a href="https://openreview.net/forum?id=ryQu7f-RZ">On the Convergence of Adam and Beyond</a>, and <a href="https://openreview.net/forum?id=rk6qdGgCZ&amp;noteId=H1zlFEcxM">Fixing Weight Decay Regularization in Adam</a>. The former claims to have found a flaw in ADAM&rsquo;s proof of convergence, and provides a simple solution. The resulting algorithm is called AMSGrad.
+The paper shows the advantages of AMSGrad on a synthetic task and a small number of experiments. However, it only uses small networks (1-layer MLP on MNIST, and a small ConvNet for CIFAR-10), and does not show test accuracy, the metric we ultimately care about more than cross-entropy loss. The ConvNet they train on CIFAR-10 is far from state-of-the-art results in terms of both train and test loss (we don&rsquo;t know about accuracy).</p>
+
+<p>Since I use ADAM in most of my experiments, I decided to evaluate AMSGrad on more realistic networks. Mind you, the models I trained here are still small, and not state-of-the-art, but definitely closer than what the paper shows.</p>
+
+<p>To implement AMSGrad, I took the ADAM implementation of <a href="https://github.com/lasagne/Lasagne">Lasagne</a> and adapted it accordingly. I also added an option to disable ADAM&rsquo;s bias correction:</p>
+
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#204a87;font-weight:bold">def</span> <span style="color:#000">amsgrad</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">loss_or_grads</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">params</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">learning_rate</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">0.001</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">beta1</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">0.9</span><span style="color:#000;font-weight:bold">,</span>
+            <span style="color:#000">beta2</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">0.999</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">epsilon</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">1e-8</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">bias_correction</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#3465a4">True</span><span style="color:#000;font-weight:bold">):</span>
+    <span style="color:#000">all_grads</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">get_or_compute_grads</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">loss_or_grads</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">params</span><span style="color:#000;font-weight:bold">)</span>
+    <span style="color:#000">t_prev</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">theano</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">shared</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">utils</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">floatX</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">0.</span><span style="color:#000;font-weight:bold">))</span>
+    <span style="color:#000">updates</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">OrderedDict</span><span style="color:#000;font-weight:bold">()</span>
+
+    <span style="color:#8f5902;font-style:italic"># Using theano constant to prevent upcasting of float32</span>
+    <span style="color:#000">one</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">T</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">constant</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">)</span>
+
+    <span style="color:#000">t</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">t_prev</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#0000cf;font-weight:bold">1</span>
+
+<span style="background-color:#dfdfdf;display:block;width:100%">    <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">bias_correction</span><span style="color:#000;font-weight:bold">:</span>
+</span><span style="background-color:#dfdfdf;display:block;width:100%">        <span style="color:#000">a_t</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">learning_rate</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">T</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">sqrt</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">one</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">beta2</span><span style="color:#ce5c00;font-weight:bold">**</span><span style="color:#000">t</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">/</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">one</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">beta1</span><span style="color:#ce5c00;font-weight:bold">**</span><span style="color:#000">t</span><span style="color:#000;font-weight:bold">)</span>
+</span><span style="background-color:#dfdfdf;display:block;width:100%">    <span style="color:#204a87;font-weight:bold">else</span><span style="color:#000;font-weight:bold">:</span>
+</span><span style="background-color:#dfdfdf;display:block;width:100%">        <span style="color:#000">a_t</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">learning_rate</span>
+</span>
+    <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">param</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">g_t</span> <span style="color:#204a87;font-weight:bold">in</span> <span style="color:#204a87">zip</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">params</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">all_grads</span><span style="color:#000;font-weight:bold">):</span>
+        <span style="color:#000">value</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">param</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">get_value</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">borrow</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#3465a4">True</span><span style="color:#000;font-weight:bold">)</span>
+
+        <span style="color:#000">m_prev</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">theano</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">shared</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">np</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">zeros</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">shape</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">dtype</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">dtype</span><span style="color:#000;font-weight:bold">),</span> 
+                               <span style="color:#000">broadcastable</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">param</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">broadcastable</span><span style="color:#000;font-weight:bold">)</span>
+        <span style="color:#000">v_prev</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">theano</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">shared</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">np</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">zeros</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">shape</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">dtype</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">dtype</span><span style="color:#000;font-weight:bold">),</span> 
+                               <span style="color:#000">broadcastable</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">param</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">broadcastable</span><span style="color:#000;font-weight:bold">)</span>
+<span style="background-color:#dfdfdf;display:block;width:100%">        <span style="color:#000">v_hat_prev</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">theano</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">shared</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">np</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">zeros</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">shape</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">dtype</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">dtype</span><span style="color:#000;font-weight:bold">),</span> 
+</span><span style="background-color:#dfdfdf;display:block;width:100%">                                   <span style="color:#000">broadcastable</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">param</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">broadcastable</span><span style="color:#000;font-weight:bold">)</span>
+</span>
+        <span style="color:#000">m_t</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">beta1</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">m_prev</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">one</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">beta1</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">g_t</span>
+        <span style="color:#000">v_t</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">beta2</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">v_prev</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">one</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">beta2</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">g_t</span><span style="color:#ce5c00;font-weight:bold">**</span><span style="color:#0000cf;font-weight:bold">2</span>
+<span style="background-color:#dfdfdf;display:block;width:100%">        <span style="color:#000">v_hat_t</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">T</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">maximum</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">v_hat_prev</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">v_t</span><span style="color:#000;font-weight:bold">)</span>
+</span>        <span style="color:#000">step</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">a_t</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">m_t</span><span style="color:#ce5c00;font-weight:bold">/</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">T</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">sqrt</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">v_hat_t</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000">epsilon</span><span style="color:#000;font-weight:bold">)</span>
+
+        <span style="color:#000">updates</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">m_prev</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">m_t</span>
+        <span style="color:#000">updates</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">v_prev</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">v_t</span>
+<span style="background-color:#dfdfdf;display:block;width:100%">        <span style="color:#000">updates</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">v_hat_prev</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">v_hat_t</span>
+</span>        <span style="color:#000">updates</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">param</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">param</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#000">step</span>
+
+    <span style="color:#000">updates</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">t_prev</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">t</span>
+    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">updates</span></code></pre></div>
+
+<p>First, let&rsquo;s check if the implementation is correct. To this end, I ran the synthetic experiment as outlined in the paper in the stochastic setting. The resulting learning curves can be seen in the following plot.</p>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="aa285396-6b16-4c00-8213-53fe70ae10f8"></div>
+</div>
+
+<p>This is fairly close to the plots in the paper, and to the re-implementation found <a href="https://colab.research.google.com/notebook#fileId=1xXFAuHM2Ae-OmF5M8Cn9ypGCa_HHBgfG">here</a>. ADAM incorrectly converges to 1, although the optimal value for x is -1. AMSGrad moves towards the best parameter.</p>
+
+<p>I then experimented with four setups:</p>
+
+<ul>
+<li>Logistic Regression on MNIST.</li>
+<li>&ldquo;CifarNet&rdquo;, the CNN as described in the paper on CIFAR-10.</li>
+<li>&ldquo;SmallVgg&rdquo;, a small VGG-style network on CIFAR-10.</li>
+<li>&ldquo;Vgg&rdquo;, a larger VGG-style network on CIFAR-10.</li>
+</ul>
+
+<p>For each of the setups, I ran 5 training runs for each combination of beta2 ∈ {0.99, 0.999} (as suggested in the paper), learning rate ∈ {0.01, 0.001, 0.0001}, and bias correction ∈ {on, off}. The batch size was set to 128 (as in the original paper). I trained for 150 epochs, with a linear decrease of the initial learning rate until it reaches 0 after epoch 150. I also used the standard left-right flip data augmentation used for CIFAR-10 experiments.
+The code to produce the experiments is available <a href="link to github">here</a>.</p>
+
+<p>I will focus on the &ldquo;Vgg&rdquo; setup first. While all setups have their own peculiarities, the conclusions we can draw from the results are similar.</p>
+
+<h1 id="vgg-on-cifar-10">Vgg on CIFAR-10</h1>
+
+<p>The ConvNet I used here has the following structure:</p>
+
+<p><img src="../../images/vgg_cifar10.svg" alt="vgg_network" /></p>
+
+<p>Each convolution is followed by batch normalisation and a rectifier activation
+function. The dashed lines indicate dropout with probabilities as indicated
+on top of the lines. For details, please see the <a href="link to github">code</a>.</p>
+
+<p>In the following plots, ADAM&rsquo;s results will always be blue, AMSGrad&rsquo;s results will be red. Lighter colors indicate that bias correction was turned off. Each line represents on training run.</p>
+
+<h2 id="training-loss">Training Loss</h2>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="dcb9ed09-e336-4782-8c5c-651d1536c637"></div>
+</div>
+
+<p>In my experiments, training loss came very close to 0, compared to 0.3 in the paper. This is, of course, due to the much larger model I used. We also see that AMSGrad seems to converge faster in the last training phase if the learning rate is not too low, and that, most of the time, using bias correction helps convergence. In the end, however, all variants for most hyper-parameter settings (except when the learning rate is too low) converge to a similar final loss. If we zoom in, we see ADAM often overtaking AMSGrad in the final few epochs. Not that this matters much&mdash;it is the <em>training</em> loss, after all. However, these are different results than reported in the paper, where AMSGrad&rsquo;s train loss was much lower than ADAM&rsquo;s (see Fig. 2 in the paper, bottom left plot).</p>
+
+<h2 id="validation-loss">Validation Loss</h2>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="9d9423d8-d3b2-41d5-b3c7-fe02be7841b1"></div>
+</div>
+
+<p>The validation loss behaves differently. Here, we see AMSGrad consistently outperforming ADAM, especially in the later epochs. Both algorithms achieve a similar minimum validation loss (around epochs 20-25), but ADAM seems to overfit more from then on. This suggests that AMSGrad generalizes better, at least in terms of cross-entropy loss. Could this remedy the fact that ADAM often generalises worse than standard SGD? I would need to do some more experiments with standard SGD to answer this question.</p>
+
+<h2 id="training-accuracy">Training Accuracy</h2>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="9df745f3-5ba8-4a58-924c-8b6cba9aaa99"></div>
+</div>
+
+<p>Let&rsquo;s look at accuracy. Accuracy is a more important metric than cross-entropy loss if we&rsquo;re interested in classification. After all, we&rsquo;re interested in how many examples our model classifies correctly. First, let&rsquo;s look at training accuracy. For CIFAR-10, most powerful models reach close to 100% accuracy if trained properly (in fact, they can reach 100% accuracy <a href="https://arxiv.org/pdf/1611.03530.pdf">even for random labels</a>).</p>
+
+<p>As we can see, training accuracy behaves very similarly to the training loss: AMSGrad converges faster than ADAM, but in the end, both achieve similar results. We can achieve almost 100% accuracy regardless of the algorithm used, given the hyper-parameters are not off by too much (again, learning rate should not be too low).</p>
+
+<p>Finally, here comes the most interesting part&mdash;validation accuracy.</p>
+
+<h2 id="validation-accuracy">Validation Accuracy</h2>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="ec1d05a4-5b62-4469-8ecd-5ddeffbdca3c"></div>
+</div>
+
+<p>But also, here comes the disappointment. Although AMSGrad gave a lower validation loss for all hyper-parameter configurations, for validation accuracy, the results are quite inconclusive. In some settings, ADAM performs better (lr = 0.01, b2=0.999), in others, AMSGrad (lr=0.001, b2=0.999). The best result over all configurations is achieved by ADAM with lr=0.001 and b2=0.99, but I don&rsquo;t think this is significant. It seems that both algorithm perform equally well given the right hyper-parameter setting.</p>
+
+<h1 id="discussion">Discussion</h1>
+
+<p>The paper pointed out a critical flaw in the proof of convergence of ADAM, and showed a modified algorithm, AMSGrad, for which the proof holds. However, I found the experimental evaluation of the practical implications a bit limited. In the paper, the authors claim that (emphasis mine) &ldquo;AMSGrad performs <em>considerably</em> better than ADAM on train loss and accuracy. Furthermore, this performance gain also translates into good performace on test loss.&rdquo; Unfortunately, my experiments do not substantiate these claims:</p>
+
+<ul>
+<li>The performance on the training set is similar for both with respect to both loss and accuracy.</li>
+<li>Test (here, validation) loss is indeed lower for AMSGrad. However,</li>
+<li>the improvement in test loss does <em>not</em> translate to better test accuracy. (To be fair, the authors never claimed that.)</li>
+</ul>
+
+<p>To clarify this: I do appreciate the authors work to point out weaknesses in ADAM. And though I did not yet check the proofs (as nobody did for ADAM until now, apparently), I am inclined to believe their conclusions. Also, the artificial examples do show that ADAM does not work under certain conditions. I think it&rsquo;s a good paper.</p>
+
+<p>However, the practical implications need more empirical exploration. The experiments I described in this post do not indicate a big practical difference between ADAM and AMSGrad.</p>
+
+<hr />
+
+<h1 id="appendix">Appendix</h1>
+
+<p>Here I show the results of the other setups.</p>
+
+<h2 id="logistic-regression-on-mnist">Logistic Regression on MNIST</h2>
+
+<p>This setup is interesting because it reflects one of the experiments in the paper. The only difference is the schedule of the learning rate: they use α/√t, where t is the iteration, while I use the linear decay after each epoch, as outlined above. Let&rsquo;s take a look at the results.</p>
+
+<h3 id="training-loss-1">Training Loss</h3>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="6ca94ec1-9633-42e1-a3b8-f3e4aa54a56c"></div>
+</div>
+
+<p>The first thing we see is that you can get much lower training loss if you follow the linear learning rate decay. In the paper, the training loss curve seems to flatten out at ~0.25 after 5000 iterations (~13 epochs with batch size 128), while in my experiments, depending on the hyper-parameters, it reaches 0.2. Another interesting observation is that ADAM gets the lowest final training loss in all configurations. This contradicts the results in the paper, especially the claim that AMSGrad is more robust to parameter changes than ADAM.</p>
+
+<h3 id="validation-loss-1">Validation Loss</h3>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="008db64e-69c7-4010-8f4d-76ef0c2c3759"></div>
+</div>
+
+<p>Here, we see a different picture. AMSGrad usually gives the lowest validation loss (unless we use a too low learning rate). However, ADAM gets the lowest validation loss (by a tiny margin) for lr=0.002 and b2=0.99, but diverges afterwards.</p>
+
+<h3 id="training-accuracy-1">Training Accuracy</h3>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="e82d0b66-01f5-4bcc-b30b-4a0f3e80c8c8"></div>
+</div>
+
+<p>Training Accuracy behaves very similarly to training loss, as does validation accuracy.</p>
+
+<h3 id="validation-accuracy-1">Validation Accuracy</h3>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="32a017b0-05fd-4e5c-bc84-eef2aab3412f"></div>
+</div>
+
+<p>From these results, it does not seem that AMSGrad enjoys a clear advantage over ADAM in a practical sense. The results depend on the choice of learning rate and beta2. Also, the results do not confirm the claim that AMSGrad is more robust to changes in hyper-parameters.</p>
+
+<h2 id="cifarnet-on-cifar-10">CifarNet on CIFAR-10</h2>
+
+<p>Here, I tried to re-implement the convolutional neural network as described in the paper. However, I could not reproduce the training curves. Depending on the learning rate and beta2, I either got better training loss (but worse validation loss), or both were worse than shown in the paper. It&rsquo;s difficult to find the causes for such things, because the paper does not provide all the details of the model (e.g., we don&rsquo;t know the initialisation scheme, and if L2 regularization was used). Anyways, here are the results.</p>
+
+<h3 id="training-loss-2">Training Loss</h3>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="2df7291e-d6f7-4c09-a4a3-74a5f4e3567e"></div>
+</div>
+
+<p>We see that high learn rates fail to converge for both algorithms. In terms of training loss, the standard learning rate of 0.001 seems to work best. Although
+the lowest train loss is achieved by ADAM, the runs using AMSGrad seem to have less variance, but I think more experiments are necessary to confirm that.</p>
+
+<h3 id="validation-loss-2">Validation Loss</h3>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="ad5af6d3-4f86-479d-b3e3-3740baed44f5"></div>
+</div>
+
+<p>The validation loss diverges badly for the configurations that achieved the best training loss. Both algorithms are affected similarly. It seems that the models trained with a lower learning rate generalise much better. I&rsquo;ll spoil here that the picture is very different when it comes to accuracy.</p>
+
+<h3 id="training-accuracy-2">Training Accuracy</h3>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="cdf2829e-8ae8-42db-99f5-56dc93de5fc4"></div>
+</div>
+
+<p>Training accuracy behaves similarly to training loss.</p>
+
+<h3 id="validation-accuracy-2">Validation Accuracy</h3>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="c8b51b3d-235f-4dd7-8ec4-7c920fac1cc4"></div>
+</div>
+
+<p>Here we come to the more interesting part. Although we saw validation loss diverge badly, validation accuracy is actually best for these models. The ones that seemed to generalise better in terms of validation loss <em>do not</em> generalise better in terms of validation accuracy. This is important to keep in mind.</p>
+
+<p>Depending on the setting, ADAM or AMSGrad out-perform each other by a tiny margin. More importantly, the model is much worse (only 78% val acc) compared to state-of-the-art models, no matter which optimisation algorithm was used.</p>
+
+<h2 id="smallvgg-on-cifar-10">SmallVgg on CIFAR-10</h2>
+
+<p>This is a smaller version of the model I used for my main experiments. It uses
+half the filters in each layer, and it uses only two conv layers in each
+block. I won&rsquo;t interpret the results for these experiments, because they
+do not add anything new.</p>
+
+<h3 id="training-loss-3">Training Loss</h3>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="20a63a04-7c6d-4799-bf31-c04abb060208"></div>
+</div>
+
+<h3 id="validation-loss-3">Validation Loss</h3>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="169ff416-9a8d-4aec-8eb6-b9b0aef3329e"></div>
+</div>
+
+<h3 id="training-accuracy-3">Training Accuracy</h3>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="b7c8aed5-3659-41b0-b7c6-3a4f0c715064"></div>
+</div>
+
+<h3 id="validation-accuracy-3">Validation Accuracy</h3>
+
+<div class="bk-root">
+    <div class="bk-plotdiv" id="bb5a4346-0d0a-4a8b-a553-0e6f1d0e2d7d"></div>
+</div>
+
+                </section>
+            </article>
+
+            
+
+            <footer id="footer">
+    <p class="small">
+        Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+    </p>
+</footer>
+        </section>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://fdlm.github.io/js/main.js"></script>
+<script src="https://fdlm.github.io/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    </body>
+</html>

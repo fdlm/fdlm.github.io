@@ -6,30 +6,32 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="author" content="Filip Korzeniowski">
 		<meta name="description" content="this is my personal website">
-		<meta name="generator" content="Hugo 0.16-DEV" />
+		<meta name="generator" content="Hugo 0.31.1" />
 		<title>A Fully Convolutional Deep Auditory Model for Musical Chord Recognition &middot; fdlm.github.io</title>
-		<link rel="shortcut icon" href="http://fdlm.github.io/images/favicon.ico">
-		<link rel="stylesheet" href="http://fdlm.github.io/css/style.css">
-		<link rel="stylesheet" href="http://fdlm.github.io/css/highlight.css">
-		<link href="http://fdlm.github.io/index.xml" rel="alternate" type="application/rss+xml" title="fdlm.github.io" />
+		<link rel="shortcut icon" href="https://fdlm.github.io/images/favicon.ico">
+		<link rel="stylesheet" href="https://fdlm.github.io/css/style.css">
+		<link rel="stylesheet" href="https://fdlm.github.io/css/highlight.css">
+		<link href="https://fdlm.github.io/index.xml" rel="alternate" type="application/rss+xml" title="fdlm.github.io" />
+
 	</head>
+
     <body>
        <nav class="main-nav">
 	
 	
-		<a href='http://fdlm.github.io/'> <span class="arrow">←</span>Home</a>
+		<a href='https://fdlm.github.io/'> <span class="arrow">←</span>Home</a>
 	
 
-    
-        <a href='http://fdlm.github.io/about/'>About</a>
-    
-        <a href='http://fdlm.github.io/projects/'>Projects</a>
-    
-        <a href='http://fdlm.github.io/publications/'>Publications</a>
-    
+        
+        <a href='https://fdlm.github.io/about/'>About</a>
+        
+        <a href='https://fdlm.github.io/projects/'>Projects</a>
+        
+        <a href='https://fdlm.github.io/publications/'>Publications</a>
+        
 
 	
-	<a class="cta" href="http://fdlm.github.io/index.xml">RSS</a>
+	<a class="cta" href="https://fdlm.github.io/index.xml">RSS</a>
 	
 </nav>
 
@@ -49,7 +51,7 @@
 Korzeniowski, F. and Widmer, G.<br />
 In Proceedings of the IEEE International Workshop on Machine Learning for Signal Processing (MLSP), Salerno, Italy, 2016.</p>
 
-<h2 id="software:4b83463f985cd9b0edb9f5d5d01fd65a">Software</h2>
+<h2 id="software">Software</h2>
 
 <p>The pre-trained chord recognition model is available as part of the
 <a href="https://github.com/CPJKU/madmom">madmom</a> audio processing framework. It
@@ -63,19 +65,19 @@ RWC Popular, Robbie Williams, and Billboard. If you use it in research, keep
 in mind that its performance on these sets might be optimistic. We plan to
 provide model files for individual folds in the future.</p>
 
-<h3 id="reproducing-the-experiments:4b83463f985cd9b0edb9f5d5d01fd65a">Reproducing the experiments</h3>
+<h3 id="reproducing-the-experiments">Reproducing the experiments</h3>
 
 <p>Although we tried to facilitate reproducing our experiments as easily as
 possible, doing it is much more involved than applying the pre-trained
 model. You will have re-create the experimental pipeline, install all
 necessary libraries, and prepare the audio and chord data.</p>
 
-<h4 id="experimental-pipeline-setup:4b83463f985cd9b0edb9f5d5d01fd65a">Experimental Pipeline Setup</h4>
+<h4 id="experimental-pipeline-setup">Experimental Pipeline Setup</h4>
 
 <p>Install the <a href="https://github.com/fdlm/chordrec">chordrec</a> framework by
 following the instructions in the README file.</p>
 
-<h4 id="data-setup:4b83463f985cd9b0edb9f5d5d01fd65a">Data Setup</h4>
+<h4 id="data-setup">Data Setup</h4>
 
 <p>Put all datasets into respective subdirectories under
 <code>chordrec/experiments/data</code>: <code>beatles</code>, <code>queen</code>, <code>zweieck</code>, <code>robbie_williams</code>,
@@ -112,7 +114,7 @@ the one of the <code>beatles</code>:</p>
 <p>Make sure the link <code>chordrec/experiments/mlsp2016/data</code> refers to this
 directory and works.</p>
 
-<h4 id="running-the-experiment:4b83463f985cd9b0edb9f5d5d01fd65a">Running the Experiment</h4>
+<h4 id="running-the-experiment">Running the Experiment</h4>
 
 <p>Follow the <code>chordrec/experiments/mlsp2016/README</code> file to run the experiments.
 Training the CNN can take a while.</p>
@@ -125,7 +127,7 @@ simply use the <code>grep</code> command, e.g.:</p>
 <pre><code>grep majmin results/*/artifacts/results.yaml
 </code></pre>
 
-<h2 id="data:4b83463f985cd9b0edb9f5d5d01fd65a">Data</h2>
+<h2 id="data">Data</h2>
 
 <p>We trained the neural network on a compound dataset comprising the Beatles,
 Queen, Zweieck, Robbie Williams and RWC popular music datasets. While we cannot
@@ -143,7 +145,7 @@ probabilistic modeling of diatonic modal harmony&rdquo;</em>. Download the annot
 <li><strong>RWC</strong>: For information on obtaining the audio files, see the <a href="https://staff.aist.go.jp/m.goto/RWC-MDB/">RWC website</a>. Chord annotations are on <a href="https://github.com/tmc323/Chord-Annotations">GitHub</a>.</li>
 </ul>
 
-<h3 id="download:4b83463f985cd9b0edb9f5d5d01fd65a">Download</h3>
+<h3 id="download">Download</h3>
 
 <p>For convenience, we provide the annotations renamed to our naming scheme
 <a href="https://drive.google.com/file/d/0B0gBhdh1fIPKamVaNnpaWHhwdWc/view?usp=sharing">here</a>. This
@@ -157,16 +159,6 @@ go.</p>
 
             
 
-            
-            
-            
-            
-            
-            
-            
-            
-
-
             <footer id="footer">
     <p class="small">
         Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
@@ -175,9 +167,10 @@ go.</p>
         </section>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="http://fdlm.github.io/js/main.js"></script>
-<script src="http://fdlm.github.io/js/highlight.js"></script>
+<script src="https://fdlm.github.io/js/main.js"></script>
+<script src="https://fdlm.github.io/js/highlight.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
+
 
 
     </body>

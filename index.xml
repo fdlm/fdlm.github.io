@@ -2,395 +2,85 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>fdlm.github.io</title>
-    <link>http://fdlm.github.io/</link>
+    <link>https://fdlm.github.io/</link>
     <description>Recent content on fdlm.github.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 24 Jul 2016 08:38:14 +0200</lastBuildDate>
-    <atom:link href="http://fdlm.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>Licensed under a &lt;a rel=&#34;license&#34; href=&#34;http://creativecommons.org/licenses/by/4.0/&#34;&gt;Creative Commons Attribution 4.0 International License&lt;/a&gt;</copyright>
+    <lastBuildDate>Fri, 22 Dec 2017 10:37:55 +0100</lastBuildDate>
+    
+	<atom:link href="https://fdlm.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Experiments with AMSGrad</title>
+      <link>https://fdlm.github.io/post/amsgrad/</link>
+      <pubDate>Fri, 22 Dec 2017 10:37:55 +0100</pubDate>
+      
+      <guid>https://fdlm.github.io/post/amsgrad/</guid>
+      <description>For ICLR 2018, two papers targeting problems with the ADAM update rule were submitted: On the Convergence of Adam and Beyond, and Fixing Weight Decay Regularization in Adam. The former claims to have found a flaw in ADAM&amp;rsquo;s proof of convergence, and provides a simple solution. The resulting algorithm is called AMSGrad. The paper shows the advantages of AMSGrad on a synthetic task and a small number of experiments.</description>
+    </item>
     
     <item>
       <title>A Fully Convolutional Deep Auditory Model for Musical Chord Recognition</title>
-      <link>http://fdlm.github.io/post/auditorymodel/</link>
+      <link>https://fdlm.github.io/post/auditorymodel/</link>
       <pubDate>Sun, 24 Jul 2016 08:38:14 +0200</pubDate>
       
-      <guid>http://fdlm.github.io/post/auditorymodel/</guid>
-      <description>
-
-&lt;p&gt;This site contains information on reproducing the experiments in the paper&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.cp.jku.at/research/papers/Korzeniowski_MLSP_2016.pdf&#34;&gt;A Fully Convolutional Deep Auditory Model for Musical Chord Recognition&lt;/a&gt;&lt;br /&gt;
-Korzeniowski, F. and Widmer, G.&lt;br /&gt;
-In Proceedings of the IEEE International Workshop on Machine Learning for Signal Processing (MLSP), Salerno, Italy, 2016.&lt;/p&gt;
-
-&lt;h2 id=&#34;software:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Software&lt;/h2&gt;
-
-&lt;p&gt;The pre-trained chord recognition model is available as part of the
-&lt;a href=&#34;https://github.com/CPJKU/madmom&#34;&gt;madmom&lt;/a&gt; audio processing framework. It
-differs only slightly from the model presented in the paper: instead of padding
-the input in the first few convolutional layers, we use a larger context window
-in the input layer, such that the feature map size after the first pooling
-layer is retained.&lt;/p&gt;
-
-&lt;p&gt;The model provided with madmom is trained on a variety of datasets: Isophonics,
-RWC Popular, Robbie Williams, and Billboard. If you use it in research, keep
-in mind that its performance on these sets might be optimistic. We plan to
-provide model files for individual folds in the future.&lt;/p&gt;
-
-&lt;h3 id=&#34;reproducing-the-experiments:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Reproducing the experiments&lt;/h3&gt;
-
-&lt;p&gt;Although we tried to facilitate reproducing our experiments as easily as
-possible, doing it is much more involved than applying the pre-trained
-model. You will have re-create the experimental pipeline, install all
-necessary libraries, and prepare the audio and chord data.&lt;/p&gt;
-
-&lt;h4 id=&#34;experimental-pipeline-setup:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Experimental Pipeline Setup&lt;/h4&gt;
-
-&lt;p&gt;Install the &lt;a href=&#34;https://github.com/fdlm/chordrec&#34;&gt;chordrec&lt;/a&gt; framework by
-following the instructions in the README file.&lt;/p&gt;
-
-&lt;h4 id=&#34;data-setup:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Data Setup&lt;/h4&gt;
-
-&lt;p&gt;Put all datasets into respective subdirectories under
-&lt;code&gt;chordrec/experiments/data&lt;/code&gt;: &lt;code&gt;beatles&lt;/code&gt;, &lt;code&gt;queen&lt;/code&gt;, &lt;code&gt;zweieck&lt;/code&gt;, &lt;code&gt;robbie_williams&lt;/code&gt;,
-and &lt;code&gt;rwc&lt;/code&gt;. The datasets have to contain three types of data: audio files in
-&lt;code&gt;.flac&lt;/code&gt; format, corresponding chord annotations in lab format with the file
-extension &lt;code&gt;.chords&lt;/code&gt;, and the cross-validation split definitions. Audio and
-annotation files can be organised on a directory structure, but do not need
-to; the programs will look for any &lt;code&gt;.flac&lt;/code&gt; and &lt;code&gt;.chord&lt;/code&gt; files in all
-directories recursively. However, the split definition
-files must be in a &lt;code&gt;splits&lt;/code&gt; sub-directory in each dataset directory (e.g.
-&lt;code&gt;beatles/splits&lt;/code&gt;). File names of audio and annotation files must correspond to
-the names given in the split definition files. For more information regarding
-the data take a look at the Data section below, where we provide a &lt;code&gt;.zip&lt;/code&gt; file
-with the annotations and split definitions that you just need to extract
-into the &lt;code&gt;experiments&lt;/code&gt; directory.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;data&lt;/code&gt; directory should look like this, where the internal structures
-of the &lt;code&gt;queen&lt;/code&gt;, &lt;code&gt;robbie_williams&lt;/code&gt;, &lt;code&gt;rwc&lt;/code&gt; and &lt;code&gt;zweieck&lt;/code&gt; directories following
-the one of the &lt;code&gt;beatles&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;experiments
- +-- data
-      +-- beatles
-           +-- *.flac
-           +-- *.chords
-           +-- splits
-                +-- 8-fold_cv_album_distributed_*.fold
-      +-- queen
-      +-- robbie_williams
-      +-- rwc
-      +-- zweieck
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Make sure the link &lt;code&gt;chordrec/experiments/mlsp2016/data&lt;/code&gt; refers to this
-directory and works.&lt;/p&gt;
-
-&lt;h4 id=&#34;running-the-experiment:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Running the Experiment&lt;/h4&gt;
-
-&lt;p&gt;Follow the &lt;code&gt;chordrec/experiments/mlsp2016/README&lt;/code&gt; file to run the experiments.
-Training the CNN can take a while.&lt;/p&gt;
-
-&lt;p&gt;Results are stored in the &lt;code&gt;results&lt;/code&gt; sub-directory created when running the
-experiment. The results of each experiment is stored in the &lt;code&gt;artifacts/results.yaml&lt;/code&gt;
-file in each subdirectory. To get a quick overview of the results, you can
-simply use the &lt;code&gt;grep&lt;/code&gt; command, e.g.:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;grep majmin results/*/artifacts/results.yaml
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;data:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Data&lt;/h2&gt;
-
-&lt;p&gt;We trained the neural network on a compound dataset comprising the Beatles,
-Queen, Zweieck, Robbie Williams and RWC popular music datasets. While we cannot
-provide audio files due to copyright reasons, we do provide links with more
-information about these datasets and to the chord annotations we used. Note
-that our file naming scheme differs from the annotation archives you can
-download on the respective sites. For convenience, we provide a &lt;code&gt;.zip&lt;/code&gt; archive
-with annotations following our naming scheme further below.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Beatles, Queen and Zweieck:&lt;/strong&gt; See the &lt;a href=&#34;http://isophonics.net/&#34;&gt;isophonics website&lt;/a&gt; for chord annotations and information about audio files.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Robbie Williams&lt;/strong&gt;: The dataset description can be found in &lt;em&gt;Bruno Di Giorgi et. al., &amp;ldquo;Automatic chord recognition based on the
-probabilistic modeling of diatonic modal harmony&amp;rdquo;&lt;/em&gt;. Download the annotations from
-&lt;a href=&#34;https://www.researchgate.net/publication/260399240_Chord_and_Harmony_annotations_of_the_first_five_albums_by_Robbie_Williams&#34;&gt;here&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;RWC&lt;/strong&gt;: For information on obtaining the audio files, see the &lt;a href=&#34;https://staff.aist.go.jp/m.goto/RWC-MDB/&#34;&gt;RWC website&lt;/a&gt;. Chord annotations are on &lt;a href=&#34;https://github.com/tmc323/Chord-Annotations&#34;&gt;GitHub&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;download:4b83463f985cd9b0edb9f5d5d01fd65a&#34;&gt;Download&lt;/h3&gt;
-
-&lt;p&gt;For convenience, we provide the annotations renamed to our naming scheme
-&lt;a href=&#34;https://drive.google.com/file/d/0B0gBhdh1fIPKamVaNnpaWHhwdWc/view?usp=sharing&#34;&gt;here&lt;/a&gt;. This
-archive also includes the fold definitions for cross-validation for each
-dataset. You can extract this archive into the &lt;code&gt;experiments/data&lt;/code&gt; directory and
-add the audio files to the respective directories. Then you should be ready to
-go.&lt;/p&gt;
-</description>
+      <guid>https://fdlm.github.io/post/auditorymodel/</guid>
+      <description>This site contains information on reproducing the experiments in the paper
+A Fully Convolutional Deep Auditory Model for Musical Chord Recognition
+Korzeniowski, F. and Widmer, G.
+In Proceedings of the IEEE International Workshop on Machine Learning for Signal Processing (MLSP), Salerno, Italy, 2016.
+Software The pre-trained chord recognition model is available as part of the madmom audio processing framework. It differs only slightly from the model presented in the paper: instead of padding the input in the first few convolutional layers, we use a larger context window in the input layer, such that the feature map size after the first pooling layer is retained.</description>
     </item>
     
     <item>
       <title>The Deep Chroma Extractor</title>
-      <link>http://fdlm.github.io/post/deepchroma/</link>
+      <link>https://fdlm.github.io/post/deepchroma/</link>
       <pubDate>Mon, 23 May 2016 09:22:08 +0200</pubDate>
       
-      <guid>http://fdlm.github.io/post/deepchroma/</guid>
-      <description>
-
-&lt;p&gt;This page contains additional information and data necessary to reproduce the
-results of the following paper:&lt;/p&gt;
-
-&lt;p&gt;F. Korzeniowski and G. Widmer. &amp;ldquo;Feature Learning for Chord Recognition: The
-Deep Chroma Extractor&amp;rdquo;. In &lt;em&gt;Proceedings of the 17th International Society for
-Music Information Retrieval Conference (ISMIR 2016)&lt;/em&gt;,  New York, USA.&lt;/p&gt;
-
-&lt;h2 id=&#34;software:1bfd6a13e67e8e2c64570b6655045f5e&#34;&gt;Software&lt;/h2&gt;
-
-&lt;p&gt;The pre-trained feature extractor is available as part of the
-&lt;a href=&#34;https://github.com/CPJKU/madmom&#34;&gt;madmom&lt;/a&gt; audio processing framework as the
-&lt;code&gt;DeepChromaProcessor&lt;/code&gt; class. Note that the model bundled with madmom differs
-from the one we used in the paper: it uses less units in the hidden layers of
-the neural network and operates on a narrower frequency band. We thus reduced
-the size of the model files without compromising the results too much.&lt;/p&gt;
-
-&lt;p&gt;The best performing model trained for the paper is available
-&lt;a href=&#34;https://drive.google.com/file/d/0B0gBhdh1fIPKUld3RWN5VlNGM2M/view?usp=sharing&#34;&gt;here&lt;/a&gt;.
-To use it with madmom, set the &lt;code&gt;models&lt;/code&gt; parameter of the &lt;code&gt;DeepChromaProcessor&lt;/code&gt;
-class accordingly, and adapt the spectrogram parameters: &lt;code&gt;fmin=30&lt;/code&gt;,
-&lt;code&gt;fmax=5500&lt;/code&gt;, &lt;code&gt;unique_filters=False&lt;/code&gt;. Note that the file actually contains
-8 models, one for each test fold. If you load all of them, the final prediction
-will be the average prediction of each model.&lt;/p&gt;
-
-&lt;p&gt;If you are using the models in your research, make sure to only use models that
-are not trained on files that you test on. A model with index
-i (e.g. &lt;code&gt;chroma_dnn_i.pkl&lt;/code&gt;) was trained on all files in folds different from i.
-For example, the model in &lt;code&gt;chroma_dnn_2.pkl&lt;/code&gt; was trained on all files defined
-in the &lt;code&gt;folddef_$j.fold&lt;/code&gt; (where &lt;code&gt;$j&lt;/code&gt; is in {0, 1, 3, 4, 5, 6, 7}) files of
-all datasets used (beatles, queen, zweieck, rwc, robbie_williams). See the
-download section at the bottom for the fold definitions we used.&lt;/p&gt;
-
-&lt;h3 id=&#34;reproducing-the-experiments:1bfd6a13e67e8e2c64570b6655045f5e&#34;&gt;Reproducing the experiments&lt;/h3&gt;
-
-&lt;p&gt;Although we tried to facilitate reproducing our experiments as easily as
-possible, doing it is much more involved than applying the pre-trained
-model. You will have re-create the experimental pipeline, install all
-necessary libraries, and prepare the audio and chord data.&lt;/p&gt;
-
-&lt;h4 id=&#34;experimental-pipeline-setup:1bfd6a13e67e8e2c64570b6655045f5e&#34;&gt;Experimental Pipeline Setup&lt;/h4&gt;
-
-&lt;p&gt;Install the &lt;a href=&#34;https://github.com/fdlm/chordrec&#34;&gt;chordrec&lt;/a&gt; framework by
-following the instructions in the README file.&lt;/p&gt;
-
-&lt;h4 id=&#34;data-setup:1bfd6a13e67e8e2c64570b6655045f5e&#34;&gt;Data Setup&lt;/h4&gt;
-
-&lt;p&gt;Put all datasets into respective subdirectories under
-&lt;code&gt;chordrec/experiments/data&lt;/code&gt;: &lt;code&gt;beatles&lt;/code&gt;, &lt;code&gt;queen&lt;/code&gt;, &lt;code&gt;zweieck&lt;/code&gt;, &lt;code&gt;robbie_williams&lt;/code&gt;,
-and &lt;code&gt;rwc&lt;/code&gt;. The datasets have to contain three types of data: audio files in
-&lt;code&gt;.flac&lt;/code&gt; format, corresponding chord annotations in lab format with the file
-extension &lt;code&gt;.chords&lt;/code&gt;, and the cross-validation split definitions. Audio and
-annotation files can be organised on a directory structure, but do not need
-to; the programs will look for any &lt;code&gt;.flac&lt;/code&gt; and &lt;code&gt;.chord&lt;/code&gt; files in all
-directories recursively. However, the split definition
-files must be in a &lt;code&gt;splits&lt;/code&gt; sub-directory in each dataset directory (e.g.
-&lt;code&gt;beatles/splits&lt;/code&gt;). File names of audio and annotation files must correspond to
-the names given in the split definition files. For more information regarding
-the data take a look at the Data section below, where we provide a &lt;code&gt;.zip&lt;/code&gt; file
-with the annotations and split definitions that you just need to extract
-into the &lt;code&gt;experiments&lt;/code&gt; directory.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;data&lt;/code&gt; directory should look like this, where the internal structures
-of the &lt;code&gt;queen&lt;/code&gt;, &lt;code&gt;robbie_williams&lt;/code&gt;, &lt;code&gt;rwc&lt;/code&gt; and &lt;code&gt;zweieck&lt;/code&gt; directories following
-the one of the &lt;code&gt;beatles&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;experiments
- +-- data
-      +-- beatles
-           +-- *.flac
-           +-- *.chords
-           +-- splits
-                +-- 8-fold_cv_album_distributed_*.fold
-      +-- queen
-      +-- robbie_williams
-      +-- rwc
-      +-- zweieck
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Make sure the link &lt;code&gt;chordrec/experiments/ismir2016/data&lt;/code&gt; refers to this
-directory and works.&lt;/p&gt;
-
-&lt;h4 id=&#34;running-the-experiment:1bfd6a13e67e8e2c64570b6655045f5e&#34;&gt;Running the Experiment&lt;/h4&gt;
-
-&lt;p&gt;We provide script and configuration files that run the exact experiments that
-produced the results shown in Table 1 in the paper. They reside under
-&lt;code&gt;experiments/ismir2016&lt;/code&gt;. If everything is set up correctly, running the
-experiment should be as easy as calling the &lt;code&gt;run.sh&lt;/code&gt; script. This can take
-a considerable amount of time, because each configuration is run ten times.
-You can change that by editing the &lt;code&gt;run.sh&lt;/code&gt; script itself.&lt;/p&gt;
-
-&lt;p&gt;Results are stored in the &lt;code&gt;results&lt;/code&gt; sub-directory created when running
-the experiment. In &lt;code&gt;results&lt;/code&gt;, there are four directories for each tested
-configuration, which contain the results of all experiments. The results of
-each experiment is stored in &lt;code&gt;artifacts/results.yaml&lt;/code&gt;. To get a quick
-overview of the results for a specific configuration, you can simply use
-the &lt;code&gt;grep&lt;/code&gt; command, e.g.:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;grep majmin results/deep_chroma_test/*/artifacts/results.yaml
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;data:1bfd6a13e67e8e2c64570b6655045f5e&#34;&gt;Data&lt;/h2&gt;
-
-&lt;p&gt;We trained the neural network on a compound dataset comprising the Beatles,
-Queen, Zweieck, Robbie Williams and RWC popular music datasets. While we cannot
-provide audio files due to copyright reasons, we do provide links with more
-information about these datasets and to the chord annotations we used. Note
-that our file naming scheme differs from the annotation archives you can
-download on the respective sites. For convenience, we provide a &lt;code&gt;.zip&lt;/code&gt; archive
-with annotations following our naming scheme further below.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Beatles, Queen and Zweieck:&lt;/strong&gt; See the &lt;a href=&#34;http://isophonics.net/&#34;&gt;isophonics website&lt;/a&gt; for chord annotations and information about audio files.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Robbie Williams&lt;/strong&gt;: The dataset description can be found in &lt;em&gt;Bruno Di Giorgi et. al., &amp;ldquo;Automatic chord recognition based on the
-probabilistic modeling of diatonic modal harmony&amp;rdquo;&lt;/em&gt;. Download the annotations from
-&lt;a href=&#34;https://www.researchgate.net/publication/260399240_Chord_and_Harmony_annotations_of_the_first_five_albums_by_Robbie_Williams&#34;&gt;here&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;RWC&lt;/strong&gt;: For information on obtaining the audio files, see the &lt;a href=&#34;https://staff.aist.go.jp/m.goto/RWC-MDB/&#34;&gt;RWC website&lt;/a&gt;. Chord annotations are on &lt;a href=&#34;https://github.com/tmc323/Chord-Annotations&#34;&gt;GitHub&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;download:1bfd6a13e67e8e2c64570b6655045f5e&#34;&gt;Download&lt;/h3&gt;
-
-&lt;p&gt;For convenience, we provide the annotations renamed to our naming scheme
-&lt;a href=&#34;https://drive.google.com/file/d/0B0gBhdh1fIPKamVaNnpaWHhwdWc/view?usp=sharing&#34;&gt;here&lt;/a&gt;. This
-archive also includes the fold definitions for cross-validation for each
-dataset. You can extract this archive into the &lt;code&gt;experiments/data&lt;/code&gt; directory and
-add the audio files to the respective directories. Then you should be ready to
-go.&lt;/p&gt;
-</description>
+      <guid>https://fdlm.github.io/post/deepchroma/</guid>
+      <description>This page contains additional information and data necessary to reproduce the results of the following paper:
+F. Korzeniowski and G. Widmer. &amp;ldquo;Feature Learning for Chord Recognition: The Deep Chroma Extractor&amp;rdquo;. In Proceedings of the 17th International Society for Music Information Retrieval Conference (ISMIR 2016), New York, USA.
+Software The pre-trained feature extractor is available as part of the madmom audio processing framework as the DeepChromaProcessor class. Note that the model bundled with madmom differs from the one we used in the paper: it uses less units in the hidden layers of the neural network and operates on a narrower frequency band.</description>
     </item>
     
     <item>
       <title>Projects</title>
-      <link>http://fdlm.github.io/projects/</link>
+      <link>https://fdlm.github.io/projects/</link>
       <pubDate>Wed, 27 Jan 2016 11:51:04 +0100</pubDate>
       
-      <guid>http://fdlm.github.io/projects/</guid>
-      <description>
-
-&lt;p&gt;This page gives a short description of the projects I developed or am involved
-in on GitHub.&lt;/p&gt;
-
-&lt;h2 id=&#34;rthmm-https-www-github-com-fdlm-rthmm:3c42bb4157bf51d85ae7ffc4e1685909&#34;&gt;&lt;a href=&#34;https://www.github.com/fdlm/rtHMM&#34;&gt;rtHMM&lt;/a&gt;&lt;/h2&gt;
-
-&lt;p&gt;rtHMM is a C++ library implementing the major inference algorithms for
-Hidden Markov Models. I designed it with a focus on real-time data processing.
-It thus efficiently handles large state spaces, especially if they are sparse.
-I developed it at the beginning of my PhD studies for a HMM-based score
-following system. I don&amp;rsquo;t actively work on it anymore, but the current version
-is quite usable. For example, rtHMM powers the mighty Drum-O-Tron 3000, a live
-drum accompaniment &amp;ldquo;robot&amp;rdquo; created at the
-&lt;a href=&#34;http://www.cp.jku.at&#34;&gt;Department of Computational Perception&lt;/a&gt;:&lt;/p&gt;
-
-&lt;iframe width=&#34;520&#34; height=&#34;390&#34; src=&#34;https://www.youtube.com/embed/sjkZg8bvMWw?rel=0&amp;amp;showinfo=0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;h2 id=&#34;madmom-https-github-com-cpjku-madmom:3c42bb4157bf51d85ae7ffc4e1685909&#34;&gt;&lt;a href=&#34;https://github.com/CPJKU/madmom&#34;&gt;madmom&lt;/a&gt;&lt;/h2&gt;
-
-&lt;p&gt;I contribute to madmom, an audio processing library written in Python by
-&lt;a href=&#34;https://github.com/superbock&#34;&gt;Sebastian Böck&lt;/a&gt; at the
-&lt;a href=&#34;http://www.cp.jku.at&#34;&gt;Department of Computational Perception&lt;/a&gt;. It facilitates
-prototyping audio processing systems and converting them to
-&amp;ldquo;&lt;a href=&#34;https://docs.python.org/2/library/pickle.html&#34;&gt;picklable&lt;/a&gt;&amp;rdquo; processing
-modules. Madmom contains processing modules of state-of-the-art algorithms for
-onset, beat, and downbeat detection, as well as tempo estimation.&lt;/p&gt;
-</description>
+      <guid>https://fdlm.github.io/projects/</guid>
+      <description>This page gives a short description of the projects I developed or am involved in on GitHub.
+rtHMM rtHMM is a C++ library implementing the major inference algorithms for Hidden Markov Models. I designed it with a focus on real-time data processing. It thus efficiently handles large state spaces, especially if they are sparse. I developed it at the beginning of my PhD studies for a HMM-based score following system.</description>
     </item>
     
     <item>
       <title>About Me</title>
-      <link>http://fdlm.github.io/about/</link>
+      <link>https://fdlm.github.io/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://fdlm.github.io/about/</guid>
-      <description>&lt;p&gt;&lt;center&gt;
-    &lt;div class=&#39;profile&#39;&gt;
-        &lt;img class=&#39;2x&#39; id=&#39;avatar&#39; src=&#39;../images/avatar.png&#39;/&gt;
-    &lt;/div&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;I am a PhD researcher at the &lt;a href=&#34;http://www.cp.jku.at&#34;&gt;Department of Computational
-Perception&lt;/a&gt; of the &lt;a href=&#34;http://www.jku.at&#34;&gt;Johannes Kepler
-University&lt;/a&gt; in Linz, where I work on probabilistic models
-and deep neural networks for audio/music processing. Currently I am interested
-in extracting musical artifacts such as (down-)beats and chords/harmonies from
-audio recordings to faciliate a richer computational understanding of music.&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;strong&gt;Find me on&amp;hellip;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.github.com/fdlm&#34;&gt;GitHub&lt;/a&gt; + &lt;a href=&#34;http://lamuerte.soup.io&#34;&gt;Soup&lt;/a&gt; + &lt;a href=&#34;http://twitter.com/fdelamuerte&#34;&gt;Twitter&lt;/a&gt;
-&lt;/center&gt;&lt;/p&gt;
-</description>
+      <guid>https://fdlm.github.io/about/</guid>
+      <description>I am a PhD researcher at the Department of Computational Perception of the Johannes Kepler University in Linz, where I work on probabilistic models and deep neural networks for audio/music processing. Currently I am interested in extracting musical artifacts such as (down-)beats and chords/harmonies from audio recordings to faciliate a richer computational understanding of music.
+ Find me on&amp;hellip;
+GitHub + Soup + Twitter</description>
     </item>
     
     <item>
       <title>Publications</title>
-      <link>http://fdlm.github.io/publications/</link>
+      <link>https://fdlm.github.io/publications/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://fdlm.github.io/publications/</guid>
-      <description>
-
-&lt;h3 id=&#34;2017:480c4de99851329b51acecc000e2e84f&#34;&gt;2017&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1706.02921&#34;&gt;End-to-End Musical Key Estimation Using a Convolutional Neural Network&lt;/a&gt;&lt;br /&gt;
-Korzeniowski, F. and Widmer, G.&lt;br /&gt;
-In Proceedings of the 25th European Signal Processing Conference (EUSIPCO), Kos, Greece, 2017&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://arxiv.org/pdf/1705.06979.pdf&#34;&gt;End-to-End Cross-Modality Retrieval with CCA Projections and Pairwise Ranking Loss&lt;/a&gt;&lt;br /&gt;
-Dorfer, M., Schlüter, J., Vall, A., Korzeniowski, F., and Widmer, G.&lt;br /&gt;
-&lt;a href=&#34;https://arxiv.org/abs/1705.06979&#34;&gt;arXiv:1705.06979 [cs.IR]&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://arxiv.org/pdf/1702.00178&#34;&gt;On the Futility of Learning Complex Frame-Level Language Models for Chord Recognition&lt;/a&gt;&lt;br /&gt;
-Korzeniowski, F. and Widmer, G.&lt;br /&gt;
-In Proceedings of the AES International Conference on Semantic Audio, Erlangen, Germany, 2017.&lt;/p&gt;
-
-&lt;h3 id=&#34;2016:480c4de99851329b51acecc000e2e84f&#34;&gt;2016&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://drive.google.com/open?id=0B0gBhdh1fIPKNXE5Z3VpQ2pjcE0&#34;&gt;A Fully Convolutional Deep Auditory Model for Musical Chord Recognition&lt;/a&gt;&lt;br /&gt;
-Korzeniowski, F. and Widmer, G.&lt;br /&gt;
-In Proceedings of the IEEE International Workshop on Machine Learning for Signal Processing (MLSP), Salerno, Italy, 2016.&lt;br /&gt;
-[ &lt;a href=&#34;../post/auditorymodel&#34;&gt;Additional Information&lt;/a&gt; ]&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://drive.google.com/open?id=0B0gBhdh1fIPKZUwtdnJpeDBjdlk&#34;&gt;Feature Learning for Chord Recognition: The Deep Chroma Extractor&lt;/a&gt;&lt;br /&gt;
-Korzeniowski, F. and Widmer, G.&lt;br /&gt;
-In Proceedings of the 17th International Society for Music Information Retrieval Conference (ISMIR), New York, USA, 2016.&lt;br /&gt;
-[ &lt;a href=&#34;../post/deepchroma&#34;&gt;Additional Information&lt;/a&gt; ]&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://wp.nyu.edu/ismir2016/wp-content/uploads/sites/2294/2016/07/179_Paper.pdf&#34;&gt;On the Potential of Simple Framewise Approaches to Piano Transcription&lt;/a&gt;&lt;br /&gt;
-Kelz, R., Dorfer, M., Korzeniowski, F., Böck, S., Arzt, A., and Widmer, G.&lt;br /&gt;
-In Proceedings of the 17th International Society for Music Information Retrieval Conference (ISMIR), New York, USA, 2016.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://arxiv.org/pdf/1605.07008v1.pdf&#34;&gt;madmom: a new Python Audio and Music Signal Processing Library&lt;/a&gt;&lt;br /&gt;
-Böck, S., Korzeniowski, F., Schlüter, J. , Krebs, F., Widmer, G.&lt;br /&gt;
-In Proceedings of the 24th ACM International Conference on Multimedia (MM), Amsterdam, The Netherlands, 2016.&lt;br /&gt;
-[ &lt;a href=&#34;https://arxiv.org/abs/1605.07008&#34;&gt;arXiv&lt;/a&gt; | &lt;a href=&#34;https://github.com/CPJKU/madmom&#34;&gt;GitHub&lt;/a&gt; ]&lt;/p&gt;
-
-&lt;h3 id=&#34;2014:480c4de99851329b51acecc000e2e84f&#34;&gt;2014&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.cp.jku.at/research/papers/Korzeniowski_ISMIR_2014.pdf&#34;&gt;Probabilistic Extraction of Beat Positions from a Beat Activation Function&lt;/a&gt;&lt;br /&gt;
-Korzeniowski, F., Böck, S., and Widmer, G.&lt;br /&gt;
-In Proceedings of 15th International Society for Music Information Retrieval Conference (ISMIR), Taipei, Taiwan, 2014.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.cp.jku.at/research/papers/Krebs_etal_EUSIPCO_2014.pdf&#34;&gt;Unsupervised Learning and Refinement of Rhythmic Patterns for Beat and Downbeat Tracking&lt;/a&gt;&lt;br /&gt;
-Krebs, F., Korzeniowski, F., Grachten, M., and Widmer, G.&lt;br /&gt;
-In Proceedings of the 22nd European Signal Processing Conference (EUSIPCO), Lisbon, Portugal, 2014.&lt;/p&gt;
-
-&lt;h3 id=&#34;2013:480c4de99851329b51acecc000e2e84f&#34;&gt;2013&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.cp.jku.at/research/papers/Korzeniowski_SMC_2013.pdf&#34;&gt;Refined Spectral Template Models for Score Following&lt;/a&gt;&lt;br /&gt;
-Korzeniowski, F. and Widmer, G.&lt;br /&gt;
-In Proceedings of the Sound and Music Computing Conference (SMC), 2013.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.cp.jku.at/research/papers/Korzeniowski_ICMC_2013.pdf&#34;&gt;Tracking Rests and Tempo Changes: Improved Score Following with Particle Filters&lt;/a&gt;&lt;br /&gt;
-Korzeniowski, F., Krebs, F., Arzt, A. and Widmer, G.&lt;br /&gt;
-In Proceedings of the International Computer Music Conference (ICMC), 2013.&lt;/p&gt;
-</description>
+      <guid>https://fdlm.github.io/publications/</guid>
+      <description>2017 End-to-End Musical Key Estimation Using a Convolutional Neural Network
+Korzeniowski, F. and Widmer, G.
+In Proceedings of the 25th European Signal Processing Conference (EUSIPCO), Kos, Greece, 2017
+End-to-End Cross-Modality Retrieval with CCA Projections and Pairwise Ranking Loss
+Dorfer, M., Schlüter, J., Vall, A., Korzeniowski, F., and Widmer, G.
+arXiv:1705.06979 [cs.IR]
+On the Futility of Learning Complex Frame-Level Language Models for Chord Recognition
+Korzeniowski, F. and Widmer, G.
+In Proceedings of the AES International Conference on Semantic Audio, Erlangen, Germany, 2017.</description>
     </item>
     
   </channel>
