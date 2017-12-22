@@ -113,7 +113,7 @@ The paper shows the advantages of AMSGrad on a synthetic task and a small number
 </ul>
 
 <p>For each of the setups, I ran 5 training runs for each combination of beta2 ∈ {0.99, 0.999} (as suggested in the paper), learning rate ∈ {0.01, 0.001, 0.0001}, and bias correction ∈ {on, off}. The batch size was set to 128 (as in the original paper). I trained for 150 epochs, with a linear decrease of the initial learning rate until it reaches 0 after epoch 150. I also used the standard left-right flip data augmentation used for CIFAR-10 experiments.
-The code to produce the experiments is available <a href="link to github">here</a>.</p>
+The code to produce the experiments is available <a href="https://github.com/fdlm/amsgrad_experiments">here</a>.</p>
 
 <p>I will focus on the &ldquo;Vgg&rdquo; setup first. While all setups have their own peculiarities, the conclusions we can draw from the results are similar.</p>
 
@@ -125,7 +125,7 @@ The code to produce the experiments is available <a href="link to github">here</
 
 <p>Each convolution is followed by batch normalisation and a rectifier activation
 function. The dashed lines indicate dropout with probabilities as indicated
-on top of the lines. For details, please see the <a href="link to github">code</a>.</p>
+on top of the lines. For details, please see the <a href="https://github.com/fdlm/amsgrad_experiments/blob/master/models.py">code</a>.</p>
 
 <p>In the following plots, ADAM&rsquo;s results will always be blue, AMSGrad&rsquo;s results will be red. Lighter colors indicate that bias correction was turned off. Each line represents on training run.</p>
 
