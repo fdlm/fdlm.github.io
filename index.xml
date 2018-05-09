@@ -6,7 +6,6 @@
     <description>Recent content on fdlm.github.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>Licensed under a &lt;a rel=&#34;license&#34; href=&#34;http://creativecommons.org/licenses/by/4.0/&#34;&gt;Creative Commons Attribution 4.0 International License&lt;/a&gt;</copyright>
     <lastBuildDate>Fri, 22 Dec 2017 10:37:55 +0100</lastBuildDate>
     
 	<atom:link href="https://fdlm.github.io/index.xml" rel="self" type="application/rss+xml" />
@@ -72,15 +71,13 @@ GitHub + Soup + Twitter</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://fdlm.github.io/publications/</guid>
-      <description>2017 End-to-End Musical Key Estimation Using a Convolutional Neural Network
+      <description>2018 A Large-Scale Study of Language Models for Chord Prediction
+Korzeniowski, F., Sears, D. R. W., and Widmer, G.
+In Proceedings of the 2018 IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP), Calgary, Canada, 2018
+2017 End-to-End Musical Key Estimation Using a Convolutional Neural Network
 Korzeniowski, F. and Widmer, G.
 In Proceedings of the 25th European Signal Processing Conference (EUSIPCO), Kos, Greece, 2017
-End-to-End Cross-Modality Retrieval with CCA Projections and Pairwise Ranking Loss
-Dorfer, M., Schlüter, J., Vall, A., Korzeniowski, F., and Widmer, G.
-arXiv:1705.06979 [cs.IR]
-On the Futility of Learning Complex Frame-Level Language Models for Chord Recognition
-Korzeniowski, F. and Widmer, G.
-In Proceedings of the AES International Conference on Semantic Audio, Erlangen, Germany, 2017.</description>
+End-to-End Cross-Modality Retrieval with CCA Projections and Pairwise Ranking Loss</description>
     </item>
     
   </channel>
