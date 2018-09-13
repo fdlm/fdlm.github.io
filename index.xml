@@ -71,13 +71,14 @@ GitHub + Soup + Twitter</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://fdlm.github.io/publications/</guid>
-      <description>2018 A Large-Scale Study of Language Models for Chord Prediction
-Korzeniowski, F., Sears, D. R. W., and Widmer, G.
-In Proceedings of the 2018 IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP), Calgary, Canada, 2018
-2017 End-to-End Musical Key Estimation Using a Convolutional Neural Network
+      <description>2018 Improved Chord Recognition by Combining Duration and Harmonic Language Models
 Korzeniowski, F. and Widmer, G.
-In Proceedings of the 25th European Signal Processing Conference (EUSIPCO), Kos, Greece, 2017
-End-to-End Cross-Modality Retrieval with CCA Projections and Pairwise Ranking Loss</description>
+In Proceedings of the 19th International Society for Music Information Retrieval Conference (ISMIR), Paris, France, 2018.
+Genre-Agnostic Key Classification With Convolutional Neural Networks
+Korzeniowski, F. and Widmer, G.
+In Proceedings of the 19th International Society for Music Information Retrieval Conference (ISMIR), Paris, France, 2018.
+Automatic Chord Recognition with Higher-Order Harmonic Language Modelling
+Korzeniowski, F.</description>
     </item>
     
   </channel>
